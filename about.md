@@ -29,8 +29,10 @@ key: page-about
 
 <img src="assets/images/headshot.jpg" alt="Me" width="200" height="200" style="border-radius: 50%;">
 
-My name is Ben Kofman, I am currently working at [Praetorian](https://www.praetorian.com/) as a Senior Offensive Security Engineer focused on advanced product security testing for leading organizations in finance, healthcare, manufacturing, technology, and other industries.
+Hello! Welcome to my blog, my name's Ben. I am an InfoSec practitioner working in the offensive security space, although I am passionate about all areas in tech and information security. In my current role as a Senior Offensive Security Engineer at [Praetorian](https://www.praetorian.com/), I am focused on advanced product security testing for leading organizations in finance, healthcare, manufacturing, software, and other industries.
 
 I started this blog to capture information on interesting topics that I strive to learn more about. Such topics include, but are not limited to, security architecture, vulnerability research, new developments in tech, and cyber warfare. While my goal for this blog is to guide my learning journey into a creative and structured output, it would be awesome to inform and entertain others as well.
 
-Thanks for visiting, and please feel free to connect and let me know your thoughts! :robot:
+In my personal life, I am a husband and father and love going on family adventures, hiking :mountain:, running, playing basketball :basketball:, and being involved at my church.
+
+Thanks for visiting, and please feel free to connect and let me know your thoughts! :alien:
