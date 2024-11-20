@@ -1,0 +1,5 @@
+docker run --rm -v "$PWD":/usr/src/app -w /usr/src/app ruby:3.3.5 bundle install
+docker-compose -f ./docker/docker-compose.build-image.yml build
+docker-compose -f ./docker/docker-compose.default.yml up
+
+# image should match the created image in docker-compose.default.yml. On Windows it worked as docker_jekyll-text-theme_dev, on Mac it was created as docker-jekyll-text-theme_dev

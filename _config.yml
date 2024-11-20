@@ -20,7 +20,7 @@ text_skin: dark # "default" (default), "dark", "forest", "ocean", "chocolate", "
 highlight_theme: tomorrow-night-eighties # "default" (default), "tomorrow", "tomorrow-night", "tomorrow-night-eighties", "tomorrow-night-blue", "tomorrow-night-bright"
 url     : https://benkofman.com # the base hostname & protocol for your site e.g. https://www.someone.com
 baseurl : # does not include hostname
-title   : Break Code In Case of Emergency
+title   : Break Code in Case of Emergency
 description: > # this means to ignore newlines until "Language & timezone"
   InfoSec Blog
 
@@ -56,7 +56,7 @@ author:
 ## => GitHub Repository (if the site is hosted by GitHub)
 ##############################
 repository: swgee/swgee.github.io
-repository_tree: master
+repository_tree: main
 
 
 ## => Paths
@@ -200,6 +200,11 @@ exclude:
   - /screenshots
   - /test
   - /vendor
+  - /docker
+  - Dockerfile.dev
+  - CNAME
+  - localsetup.txt
+  - screenshot.jpg
 
 defaults:
   - scope:
