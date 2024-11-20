@@ -1,6 +1,11 @@
 ---
-title: What is SEO Poisoning? (MITRE ATT&CK TTPs)
+title: What is SEO Poisoning? (MITRE-ATT&CK TTP)
 category: MITRE-ATT&CK
+article_header:
+  type: cover
+  image:
+    src: /images/mitreattack.png
+cover: /images/mitreattack.png
 ---
 
 #### Tactic: Resource Development
