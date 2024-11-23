@@ -1,6 +1,6 @@
 ---
 title: What is SEO Poisoning? (MITRE-ATT&CK TTP)
-tags: MITRE-ATT&CK
+tags: Learning
 article_header:
   type: cover
   image:
