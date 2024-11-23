@@ -8,11 +8,9 @@ article_header:
 cover: /images/mitreattack.png
 ---
 
-#### Tactic: Resource Development
-#### Technique: Stage Capabilities
-## Purpose
-
-To increase the number of successful [Drive-by Compromise](https://attack.mitre.org/techniques/T1189) / Watering hole attacks from a malicious site by exploiting search engine ranking mechanisms and boosting the site in search results.
+* Tactic: Resource Development
+* Technique: Stage Capabilities
+* Purpose: To increase the number of successful [Drive-by Compromise](https://attack.mitre.org/techniques/T1189) / Watering hole attacks from a malicious site by exploiting search engine ranking mechanisms and boosting the site in search results.
 
 ## Scenario
 
