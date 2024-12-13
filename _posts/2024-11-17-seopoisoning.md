@@ -5,7 +5,7 @@ article_header:
   type: cover
   image:
     src: /images/mitreattack.png
-cover: /images/mitreattack.png
+cover: /images/seopoisoning/cover.png
 ---
 
 * Tactic: Resource Development
