@@ -1,4 +1,13 @@
-<figure class="image" style="height: auto; margin: 0 auto; padding: 10px; position: relative; width: {{ include.percentage }}%">
+<figure class="image" style="height: auto; margin: 0 auto; padding: 10px; position: relative; width: {{ include.percentage }}%;">
     <img src="{{ include.url }}" alt="{{ include.description }}">
     <figcaption style="text-align: center;">{{ include.description }}</figcaption>
 </figure>
+
+<style>
+/* Apply 80% width for the <figure> on mobile devices */
+@media (max-width: 768px) {
+    .image {
+        width: 80% !important;
+    }
+}
+</style>
