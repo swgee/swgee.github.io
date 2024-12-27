@@ -16,7 +16,7 @@ The username list can be built from a variety of sources. If the login portal ha
 
 The attempted passwords should conform to the password policy used by the organization or application. Common passwords, keyboard patterns, popular phrases, or names are often a good choice, but it depends on the target. If a certain keyword, such as the company's name, appears in many data breaches, that may also be a solid choice for the password list as it could be reused across the organization. Capital letter requirements are usually used for the first character, 1 is usually used for the number requirements, and "!" is the most popular special character. If the authentication system does not employ a denylist of weak passwords, "Password1!" would be good choice if the site requires a minimum of 10 characters.
 
-### Fireprox
+### Setting up Fireprox
 
 IP-based lockout is another protection mechanism used to defend against brute-force attacks. If too many failed login attempts originate from the same IP address, that address will be blocked. Attackers would need to send their traffic from many different IP addresses to be able to conduct password spraying. One popular open source tool for IP rotation is [Fireprox](https://github.com/ustayready/fireprox). From the project's README: "FireProx leverages the AWS API Gateway to create pass-through proxies that rotate the source IP address with every request." So traffic would appear to come from many different AWS IP addresses.
 
@@ -47,7 +47,7 @@ Since these resources' locations are relative to the base URL, the browser is re
 
 Most of the following modifications can be done using standard match and replace rules, but we will implement it using Bambda match and replace rules, which were introduced as of December 19th 2024. They offer more flexibility for modifying requests in flight using the [Montoya API](https://portswigger.github.io/burp-extensions-montoya-api/javadoc/index.html), the Java interface that implements all Burp functionality that can be leveraged to build extensions.
 
-{% include image.html url="/images/pwspraying/bambda_editor.png" description="Default bambda editor UI. It includes suggestions, error output, and a test editor." percentage="50" %}
+{% include image.html url="/images/pwspraying/bambda_editor.png" description="Default bambda editor UI. It includes suggestions, error output, and a test editor." percentage="80" %}
 
 Bambda rules can be for requests or responses. They must return a `requestResponse.request()` or `requestResponse.response()` object depending on the type of rule. The base rule returns an unmodified request or response object. The following request bambda will fix the issue where not all resources are loaded by prepending all requests to the API Gateway URL with `/fireprox`.
 
@@ -59,13 +59,13 @@ if (requestResponse.request().headerValue("Host").equals("zrn9b63jch.execute-api
 }
 {% endhighlight %}
 
-{% include image.html url="/images/pwspraying/replace_worked.png" description="'/fireprox' prepended and all resources respond with a 200 OK" percentage="50" %}
+{% include image.html url="/images/pwspraying/replace_worked.png" description="'/fireprox' prepended and all resources respond with a 200 OK" percentage="80" %}
 
 API Gateway appends some additional headers to requests before sending them to the target URL. We can inspect those additional headers by creating another proxy for Burp Collaborator and reviewing the HTTP request data. One of those headers will be problematic for password spraying if the target application records it...
 
-{% include image.html url="/images/pwspraying/collaborator.png" description="X-Forwarded-For HTTP header reveals source IP address of the original request (I used a VPN)" percentage="50" %}
+{% include image.html url="/images/pwspraying/collaborator.png" description="X-Forwarded-For HTTP header reveals source IP address of the original request (I used a VPN)" percentage="80" %}
 
-The Fireprox README contains the solution to masking this header. As of the time of this writing, adding a custom `X-My-X-Forwarded-For` header will replace the `X-Forwarded-For` header added by API Gateway. We can amend the request bambda to add the header to the HTTP request with a random, high-entropy integer to avoid repitition.
+The Fireprox README contains the solution to masking this header. As of the time of this writing, adding a custom `X-My-X-Forwarded-For` header will replace the `X-Forwarded-For` header added by API Gateway. We can amend the request bambda to add the header to the HTTP request with a random, high-entropy integer to avoid repetition.
 
 {% highlight java %}
 if (requestResponse.request().headerValue("Host").equals("zrn9b63jch.execute-api.us-east-1.amazonaws.com")) {
@@ -78,10 +78,92 @@ if (requestResponse.request().headerValue("Host").equals("zrn9b63jch.execute-api
 }
 {% endhighlight %}
 
-### Adding rules for target site
+### Custom rules for the target site
 
-The target site may require some custom match and replace rules to be created. Login requests are often made from JavaScript and request the target site directly. This would bypass the API Gateway and defeat the purpose of creating a proxy. To demonstrate, I created another proxy for `https://doesntexist.okta.com`. Okta portals for organizations can be accessed via the okta.com subdomain. However, Okta will serve a dummy login site for invalid subdomains which we can use for testing.
+The target site may require additional match and replace rules to successfully proxy all requests made by the login page. A few possible scenarios that would require additional modification are:
 
-Testing the login will require using a browser with the Same Origin Policy disabled. This is because cross-origin requests will be sent to the target URL from the API Gateway subdomain, which is usually blocked by browsers (unless the target site has an overly permissive CORS policy). To launch Chrome with these security protections disabled for testing, you can start it with this command: `C:\Program Files\Google\Chrome\Application\chrome.exe --disable-web-security --user-data-dir=%HOMEPATH%\.chrome-data`. Adjust as necessary for Linux or Mac.
+- The target site issues a Content-Security-Policy header that the API Gateway subdomain violates
+- The target site issues a redirect to another path on the site, leaving the proxy site
+
+To demonstrate, I created another proxy for `https://doesntexist.okta.com`. Okta portals for organizations are generally accessed via their okta.com subdomain. However, Okta will serve a dummy login site for invalid subdomains which we can use for testing.
+
+Server CORS policies will likely be violated since the proxy site is not the same origin as the target site. Although response headers can be modified to bypass CORS, we can do all testing in a Chrome instance with CORS disabled using the command `chrome --disable-web-security --user-data-dir=/tmp/chrome_testing_data`. Adjust for Windows as required.
 {:.info}
 
+After swapping the API Gateway subdomain in the request bambda, I browsed to the new proxy and attempted a test login. While the page loaded without issues, the site's Content-Security-Policy caused Chrome to block the login request.
+
+{% include image.html url="/images/pwspraying/csp.png" description="CSP violated when doesntexist.okta.com is requested from the API Gateway URL" percentage="80" %}
+
+To bypass this, we can create a response bambda to remove the Content-Security-Policy header from responses to requests to the API Gateway URL.
+
+{% highlight java %}
+if (requestResponse.request().headerValue("Host").equals("gg9j5bfyxd.execute-api.us-east-1.amazonaws.com")) {
+	return requestResponse.response().withRemovedHeader("Content-Security-Policy");
+} else {
+	return requestResponse.response();
+}
+{% endhighlight %}
+
+The login request is now made, and no CSP errors are thrown. However, the login request is made by JavaScript and sent directly to the target URL, bypassing the proxy site.
+
+{% include image.html url="/images/pwspraying/unauthorized.png" description="The browser is happy but the proxy is pointless now" percentage="80" %}
+
+We need to add another request bambda to send requests made directly to the target to the proxy instead. The below bambda creates a new HTTP request to the proxy URL instead of the target URL, copying the original request headers, body, and method. An `X-My-X-Forwarded-For` header is added and the Host header is updated.
+
+{% highlight java %}
+if (requestResponse.request().headerValue("Host").equals("doesntexist.okta.com")) {
+    String new_url = "https://gg9j5bfyxd.execute-api.us-east-1.amazonaws.com/fireprox" + requestResponse.request().path();
+    Random random = new Random();
+    String random_number = String.valueOf(random.nextInt(1000000000) + 1;);
+    return HttpRequest.httpRequestFromUrl(new_url).withUpdatedHeaders(requestResponse.request().headers())
+        .withBody(requestResponse.request().body())
+        .withAddedHeader("X-My-X-Forwarded-For",random_number)
+        .withMethod(requestResponse.request().method())
+        .withUpdatedHeader("Host","gg9j5bfyxd.execute-api.us-east-1.amazonaws.com");
+} else {
+    return requestResponse.request();
+}
+{% endhighlight %}
+
+Now, all requests are sent through the proxy and the login request is made successfully.
+
+{% include image.html url="/images/pwspraying/login_attempt_successful.png" description="Proxy history after all the custom rules are applied" percentage="80" %}
+
+### Automating logins with Selenium
+
+Once the proxy is set up and the match and replace rules are created, the login attempts can now be automated. This could be possible using somethign simple like Python Requests if the login form is basic and only the HTML needs to be parsed. However, many login forms, like single-sign-on portals such as Okta, are more complex, have multiple steps, and require JavaScript to be executed. To automate this process, many browser automation tools exist which control a browser process (called a "driver") to test website functionality at flexibly and at scale.
+
+The ]Selenium](https://github.com/SeleniumHQ/selenium) project is one of the most popular of these tools. It is an browser automation ecosystem with support for a variety of languages. The easiest way to get up and running with Selenium is to use the [Selenium IDE](https://www.selenium.dev/selenium-ide/), a Chrome and Firefox extension that can record browser actions and output the scripts. Below is a recording of using the Selenium IDE to record the login on the Okta site and export to a Python script.
+
+{% include image.html url="/images/pwspraying/selenium.gif" description="Easy as pie" percentage="80" %}
+
+The unaltered, exported Python script is below:
+
+{% highlight python %}
+# Generated by Selenium IDE
+import pytest
+import time
+import json
+from selenium import webdriver
+from selenium.webdriver.common.by import By
+from selenium.webdriver.common.action_chains import ActionChains
+from selenium.webdriver.support import expected_conditions
+from selenium.webdriver.support.wait import WebDriverWait
+from selenium.webdriver.common.keys import Keys
+from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
+
+class TestTest():
+  def setup_method(self, method):
+    self.driver = webdriver.Chrome()
+    self.vars = {}
+  
+  def teardown_method(self, method):
+    self.driver.quit()
+  
+  def test_test(self):
+    self.driver.get("https://gg9j5bfyxd.execute-api.us-east-1.amazonaws.com/")
+    self.driver.set_window_size(1200, 1021)
+    self.driver.find_element(By.ID, "okta-signin-username").send_keys("test")
+    self.driver.find_element(By.ID, "okta-signin-password").send_keys("test")
+    self.driver.find_element(By.ID, "okta-signin-submit").click()
+{% endhighlight %}
