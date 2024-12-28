@@ -247,7 +247,7 @@ def login_worker(credential_pair):
     test_login.teardown_method()
 {% endhighlight %}
 
-To save the result, we can parse the HTML after the login attempt is made, which would be different for each target site. A simpler yet less storage-efficient method is take a screenshot of the webdriver after the login attempt is made.
+To save the result, we can parse the HTML after the login attempt is made, which would be different for each target site. A simpler yet less storage-efficient method is to take a screenshot of the webdriver after the login attempt is made.
 
 {% highlight python %}
 def test_login(self, username, password):
@@ -279,7 +279,7 @@ def test_login(self, username, password):
         print("Login failed for "+username+":"+password+" - "+str(e))
 {% endhighlight %}
 
-Finally, we can add options to the Chrome driver to disable web security to bypass CORS protections, use Burp Suite as a proxy, and run in headless mode to prevent a bunch of browsers windows from appearing on the screen.
+Finally, we can add options to the Chrome driver to disable web security to bypass CORS protections, use Burp Suite as a proxy, and run in headless mode to prevent a bunch of browser windows from appearing on the screen.
 
 {% highlight python %}
 def setup_method(self):
@@ -344,6 +344,6 @@ if __name__ == "__main__":
 
 ### Conclusion
 
-To summarize, we created a proxy for the target site using AWS API Gateway and Fireprox. We then created match-and-replace rules in Burp Suite to ensure all requests are forwarded to the correct location on the target site. Finally, we created a Python script that uses Selenium to automate login attempts and save screenshots of the login results.
+To summarize, we created a proxy for the target site using AWS API Gateway and Fireprox. We then created match-and-replace rules in Burp Suite to ensure all requests were forwarded to the correct location on the target site. Finally, we created a Python script that uses Selenium to automate login attempts and save screenshots of the login results.
 
 This methodology can be used as a guideline to perform password spraying attacks. Every site is different, so the exact implementation of each step will vary and require sufficient testing. Thanks for reading, I hope you found this useful or learned something new!
