@@ -154,7 +154,7 @@ Now, all requests are sent through the proxy and the login request is made succe
 
 ### Automating logins with Selenium
 
-Once the proxy is set up and the match and replace rules are created, the login attempts can now be automated. This could be possible using something simple like Python Requests if the login form is basic and only the HTML needs to be parsed. However, many login forms, like single-sign-on portals such as Okta, are more complex, have multiple steps, and require JavaScript to be executed. To automate this process, browser automation tools exist which control a browser process (called a "driver") to test website functionality with flexibly and at scale.
+Once the proxy is set up and the match and replace rules are created, the login attempts can now be automated. This could be possible using something simple like Python Requests if the login form is basic and only the HTML needs to be parsed. However, many login forms, like single-sign-on portals such as Okta, are more complex, have multiple steps, and require JavaScript to be executed. To automate this process, browser automation tools exist which control a browser process (called a "driver") to test website functionality with flexibility and at scale.
 
 If the login form implements a CAPTCHA, browser automation tools and scripted HTTP requests will not be of any use, unless the CAPTCHA can be bypassed.
 {:.warning}
