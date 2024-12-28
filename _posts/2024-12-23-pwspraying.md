@@ -58,7 +58,7 @@ Any request sent to the proxy URL will be forwarded to the target URL, and each 
 
 {% include image.html url="/images/pwspraying/proxy_example.png" description="My website's HTML returned" percentage="80" %}
 
-According to this [range tracker] (https://github.com/joetek/aws-ip-ranges-json/blob/master/ip-ranges-api-gateway.json), the `us-east-1` region's AWS API Gateway Network Border Group contains `13,312`. So, for very large targets, multiple regions may be necessary, as some IP addresses within the range may be reused.
+According to this [range tracker](https://github.com/joetek/aws-ip-ranges-json/blob/master/ip-ranges-api-gateway.json), the `us-east-1` region's AWS API Gateway Network Border Group contains `13,312`. So, for very large targets, multiple regions may be necessary, as some IP addresses within the range may be reused.
 
 ### Burp Suite proxy rules
 
