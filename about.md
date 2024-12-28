@@ -29,8 +29,8 @@ key: page-about
 
 <img src="assets/images/headshot.jpg" alt="Me" width="100" height="100" style="border-radius: 50%;">
 
-Hey! I'm Ben. I am an InfoSec practitioner that is passionate about the impact technology has on society and culture. 
+Hey! I'm Ben. I am an InfoSec practitioner passionate about technology's impact on society and culture. 
 
-I started this blog to capture information on topics I want to learn more about, and channel my learning into a creative and structured output while sharing with others. Such topics include, but are not limited to, security architecture, vulnerability research, new developments in tech, and cyber warfare.
+I started this blog to capture information on topics I want to learn more about and channel my learning into a creative and structured output while sharing with others. Such subjects include, but are not limited to, security architecture, vulnerability research, new developments in tech, and cyber warfare.
 
-Thanks for visiting, feel free to reach out and let me know what you think. :space_invader:
+Thanks for visiting. Feel free to reach out and let me know what you think. :space_invader:
