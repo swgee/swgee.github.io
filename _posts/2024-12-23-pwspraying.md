@@ -6,32 +6,32 @@ article_header:
   image:
     src: /images/pwspraying/header.jpg
 cover: /images/pwspraying/octopus.webp
+opengraph: |
+    <!-- HTML Meta Tags -->
+    <meta name="description" content="Password spraying is an attack technique that brute-forces a small set of predictable passwords across a set of likely valid user accounts. Many applications...">
+
+    <!-- Facebook Meta Tags -->
+    <meta property="og:url" content="https://benkofman.com/2024/12/23/pwspraying.html">
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Password Spraying with Selenium and Fireprox - Break Code in Case of Emergency">
+    <meta property="og:description" content="Password spraying is an attack technique that brute-forces a small set of predictable passwords across a set of likely valid user accounts. Many applications...">
+    <meta property="og:image" content="https://benkofman.com/images/pwspraying/octopus.webp">
+
+    <!-- Twitter Meta Tags -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta property="twitter:domain" content="benkofman.com">
+    <meta property="twitter:url" content="https://benkofman.com/2024/12/23/pwspraying.html">
+    <meta name="twitter:title" content="Password Spraying with Selenium and Fireprox - Break Code in Case of Emergency">
+    <meta name="twitter:description" content="Password spraying is an attack technique that brute-forces a small set of predictable passwords across a set of likely valid user accounts. Many applications...">
+    <meta name="twitter:image" content="https://benkofman.com/images/pwspraying/octopus.webp">
+
+    <!-- Meta Tags Generated via https://www.opengraph.xyz -->
 ---
-
-<!-- HTML Meta Tags -->
-<meta name="description" content="Password spraying is an attack technique that brute-forces a small set of predictable passwords across a set of likely valid user accounts. Many applications...">
-
-<!-- Facebook Meta Tags -->
-<meta property="og:url" content="https://benkofman.com/2024/12/23/pwspraying.html">
-<meta property="og:type" content="website">
-<meta property="og:title" content="Password Spraying with Selenium and Fireprox - Break Code in Case of Emergency">
-<meta property="og:description" content="Password spraying is an attack technique that brute-forces a small set of predictable passwords across a set of likely valid user accounts. Many applications...">
-<meta property="og:image" content="https://benkofman.com/images/pwspraying/octopus.webp">
-
-<!-- Twitter Meta Tags -->
-<meta name="twitter:card" content="summary_large_image">
-<meta property="twitter:domain" content="benkofman.com">
-<meta property="twitter:url" content="https://benkofman.com/2024/12/23/pwspraying.html">
-<meta name="twitter:title" content="Password Spraying with Selenium and Fireprox - Break Code in Case of Emergency">
-<meta name="twitter:description" content="Password spraying is an attack technique that brute-forces a small set of predictable passwords across a set of likely valid user accounts. Many applications...">
-<meta name="twitter:image" content="https://benkofman.com/images/pwspraying/octopus.webp">
-
-<!-- Meta Tags Generated via https://www.opengraph.xyz -->
 
 Password spraying is an attack technique that brute-forces a small set of predictable passwords across a set of likely valid user accounts. Many applications employ account lockouts to mitigate the threat of dictionary attacks on their authentication portals. Suppose an attacker obtains a list of likely valid user accounts but cannot try many passwords. In that case, they may resort to password spraying and choose a few passwords with the highest chance of being valid across the target usernames. Staying under the lockout limit also maintains stealth. The larger the list of targets, the higher the chance a user is using a weak password.
 
 Only perform password spraying on targets you have permission to test.
-{:.error}
+{:.warning}
 
 ### Building the wordlists
 
