@@ -8,6 +8,8 @@ article_header:
 cover: /images/pwspraying/octopus.webp
 ---
 
+<meta property="og:image" content="/images/pwspraying/octopus.webp" />
+
 Password spraying is an attack technique that brute-forces a small set of predictable passwords across a set of likely valid user accounts. Many applications employ account lockouts to mitigate the threat of dictionary attacks on their authentication portals. Suppose an attacker obtains a list of likely valid user accounts but cannot try many passwords. In that case, they may resort to password spraying and choose a few passwords with the highest chance of being valid across the target usernames. Staying under the lockout limit also maintains stealth. The larger the list of targets, the higher the chance a user is using a weak password.
 
 Only perform password spraying on targets you have permission to test.
