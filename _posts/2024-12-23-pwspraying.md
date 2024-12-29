@@ -68,7 +68,7 @@ The screenshot above shows that some of the site's static resources were not loa
 
 Since these resources' locations are relative to the base URL, the browser requests them from the API gateway subdomain used to proxy traffic to the target site. However, no proxy has been created for each of those paths, only the "/fireprox" path. While proxying traffic through Burp Suite, we can use match and replace rules to modify each request to ensure all traffic sent to the proxy reaches the correct location on the target.
 
-Most of the following modifications can be done using standard match-and-replace rules, but we will implement them using Bambda match-and-replace rules introduced on December 19th, 2024. They offer more flexibility for modifying requests in flight using the [Montoya API](https://portswigger.github.io/burp-extensions-montoya-api/javadoc/index.html), the Java interface that implements all Burp functionality that can be leveraged to build extensions.
+Most of the following modifications can be done using standard match and replace rules, but we will implement them using Bambda match and replace rules introduced on December 19th, 2024. They offer more flexibility for modifying requests in flight using the [Montoya API](https://portswigger.github.io/burp-extensions-montoya-api/javadoc/index.html), the Java interface that implements all Burp functionality that can be leveraged to build extensions.
 
 {% include image.html url="/images/pwspraying/bambda_editor.png" description="Default bambda editor UI. It includes suggestions, error output, and a test editor." percentage="100" %}
 
@@ -344,6 +344,6 @@ if __name__ == "__main__":
 
 ### Conclusion
 
-To summarize, we created a proxy for the target site using AWS API Gateway and Fireprox. We then created match-and-replace rules in Burp Suite to ensure all requests were forwarded to the correct location on the target site. Finally, we created a Python script that uses Selenium to automate login attempts and save screenshots of the login results.
+To summarize, we created a proxy for the target site using AWS API Gateway and Fireprox. We then created match and replace rules in Burp Suite to ensure all requests were forwarded to the correct location on the target site. Finally, we created a Python script that uses Selenium to automate login attempts and save screenshots of the login results.
 
 This methodology can be used as a guideline to perform password spraying attacks. Every site is different, so the exact implementation of each step will vary and require sufficient testing. Thanks for reading, I hope you found this useful or learned something new!
