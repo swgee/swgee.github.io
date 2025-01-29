@@ -1,5 +1,5 @@
 ---
-title: "Comparing the Attack Surfaces of iOS and Android"
+title: "Attack Surface Analysis of the Leading Mobile Platforms"
 tags: Learning
 article_header:
   type: cover
@@ -16,13 +16,13 @@ Of course, there are corporate-issued smartphones and internal applications, but
 
 Smartphones constitute arguably the greatest digital attack surface in modern society: over half the global population and most people in the developed world own one. Mobile applications are heavily relied on for everything we do, be it communication, banking, media, navigation, photos, etc. The average person spends four to five hours a day using their phone. They are a part of us. We are essentially cyborgs without a physical link between our mechanical and biological components (for now).
 
-The two dominant platforms are Android and iOS. Combined, 99.5% of smart phones run either operating system - and there are no other legitimate choices supported by the majority of app developers. Android dominates the global market share at about 73.5%, with iOS coming in at 26%. 
+The two dominant platforms are Android and iOS. Combined, 99.5% of smart phones run either operating system - there are no other legitimate choices supported by the majority of app developers. Android dominates the global market share at about 73.5%, with iOS coming in at 26%. 
 
 {% include image.html url="/images/iosandroid/globalstats.png" description="Global market share of mobile operating systems 2024" percentage="80" %}
 
-This article will explore the primary distinctions between the two platforms, focusing on their characteristics, architectures, and vulnerabilities. The difference between the two operating systems can be summarized as followed:
+This article will explore the primary distinctions between the two platforms, and compare their attack surfaces from the perspective of an every day user. The difference between the two operating systems can be summarized as followed:
 
-Android is like the Wild West - you have the right to do whatever you want and malware runs rampant like bandits. However, the open source nature of the platform reduces the prevalance of no-click zero days. iOS is like being in a padded cell - you have no rights and can't harm yourself by installing anything malicious. However, your protection is entirely dependent on Apple and zero-days are not uncommon.
+Android is like the Wild West - you have the right to do whatever you want and malware runs rampant like bandits. However, the open nature of the platform may reduce the possibility of being targeted with advanced no-click exploits. iOS is like being in a padded cell - you can't harm yourself by installing anything malicious, but you also have no rights. Also, your protection is entirely dependent on Apple.
 {:.info}
 
 ## The Smartphone Market
@@ -49,10 +49,52 @@ Some organizations build devices running Android for purposes other than persona
 
 ## Security Patching
 
-iOS updates are consistently released to the public, with many phones defaulting to automatically install the updates overnight when plugged in to charge. Since Apple controls the entire ecosystem, they can 
+iOS is a monolithic architecture, meaning every major component is built by Apple across both the software and hardware. The operating system is composed of the following layers starting from the lowest level:
+
+1. Core OS: Kernel, bluetooth/accessory integration, cryptographic operations, CPU optimization
+2. Core Services: Includes additional basic functionality like cloud data transfer, location services, file system access
+3. Media: Handles graphics and audio rendering and processing
+4. Cocoa Touch: API to create native iOS apps by providing access to hardware and software features like user interface elements or the camera
+
+Because Apple controls the entire technology stack of their products, their update process is very streamlined. Since iOS 16.4.1, Apple implemented [Rapid Security Responses](https://support.apple.com/en-us/102657) to push critical bug fixes in between standard iOS updates. The full list of security updates for all Apple products can be seen on a single web page on the Apple website. 
+
+{% include image.html url="/images/iosandroid/iosupdates.png" description="Top of the Apple security update list at time of writing" percentage="80" %}
+
+The security update process for Android is not as simple. The Android platform is composed of several layers, each managed by different entities.
+
+___ list android architecture and who manages them, talk about different release schedules for oems ___
+
+## Vulnerability Research
+
+___ compare ios security updates to android___
+___https://support.apple.com/en-us/121837___
+___https://source.android.com/docs/security/bulletin/2025-01-01___
+___ mention ios research program ___
+___ discuss severity and size of security bulletins ___
+___ discuss how the more vulnerabilities found the more secure the platform is ___
+___ discuss how exploits chain together vulnerabilities ___
+
+## Exploit History
+
+___ get examples of big exploits on ios and android like pegasus, operation triangulation ___
+___ mention zerodium ___
+
+## Malware Prevalance
+
+__ talk about code signing requirements on ios vs android __
+__ talk about different types of malware on android __
+
+## Conclusion
+
 
 ## References
+The inspiration for this blog post and much of its information came from [SANS SEC575](https://www.sans.org/cyber-security-courses/ios-android-application-security-analysis-penetration-testing/): iOS and Android Application Security Analysis and Penetration Testing, taught by Jeroen Beckers.
+
 [Time Spent Using Smartphones 2024](https://explodingtopics.com/blog/smartphone-usage-stats) \
 [Mobile Operating System Market Share Worldwide](https://gs.statcounter.com/os-market-share/mobile/worldwide) \
 [Mobile Operating System Market Share in the United States](https://gs.statcounter.com/os-market-share/mobile/united-states-of-america) \
 [Android Statistics - Top manufacturers](https://www.appbrain.com/stats/top-manufacturers) \
+[Apple security releases](https://support.apple.com/en-us/100100) \
+[Architecture of iOS Operating System](https://www.geeksforgeeks.org/architecture-of-ios-operating-system/) \
+[Architecture of the iOS](https://www.oreilly.com/library/view/beginning-ios-5/9781118144251/ch001-sec009.html) \
+[Android Platform Architecture](https://developer.android.com/guide/platform) \
