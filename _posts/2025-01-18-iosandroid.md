@@ -10,23 +10,21 @@ cover: /images/iosandroid/header.jpg
 
 ## Introduction
 
-Mobile security is a more specialized field in the world of Information Security. Where much of cybersecurity focuses on securing enterprise environments and applications, mobile security professionals focus on protecting individuals and their data from compromise, as individuals are the primary consumers of mobile technology. 
-
-Of course, there are corporate-issued smartphones and internal applications, but these make up a relatively tiny fraction of the enterprise attack surface. The primary goal of mobile vulnerability researchers, malware reverse engineers, and application penetration testers is to secure the devices that so many people trust to store and process their most sensitive and personal information. 
-
 Smartphones constitute arguably the greatest digital attack surface in modern society: over half the global population and most people in the developed world own one. Mobile applications are heavily relied on for everything we do, be it communication, banking, media, navigation, photos, etc. The average person spends four to five hours a day using their phone<sup>1</sup>. They are a part of us. We are essentially cyborgs without a physical link between our mechanical and biological components (for now).
 
 The two dominant platforms are Android and iOS. Combined, 99.5% of smart phones run either operating system - there are no other legitimate choices supported by the majority of app developers. Android dominates the global market share at about 73.5%, with iOS coming in at 26%. 
 
 {% include image.html url="/images/iosandroid/globalstats.png" description="Global market share of mobile operating systems 2024<sup>2</sup>" percentage="80" %}
 
-This article will explore the primary distinctions between the two platforms, and compare their attack surfaces from the perspective of an every day user. The difference between the two operating systems can be summarized as followed:
+This article will explore the primary distinctions between the two platforms, and compare their native attack surfaces. Vulnerabilities in applications developed for each platform will not be discussed, as this is a separate topic that has been thoroughly covered by the [OWASP Mobile Application Security Verification Standard (MASVS)](https://mas.owasp.org/MASVS/) and other resources. 
+
+The difference between the two operating systems can be summarized as followed:
 
 Android is like the Wild West - you have the right to do whatever you want and malware runs rampant like bandits. However, the open nature of the platform may reduce the possibility of being targeted with advanced no-click exploits. iOS is like being in a padded cell - you can't harm yourself by installing anything malicious, but you also have no rights. Also, your protection is entirely dependent on Apple (the prison guards).
 {:.info}
 
 ## The Smartphone Market
-iOS is the software powering iPhones, Apple's flagship personal computing device. For Americans, it may come as a surprise that iOS only owns about a quarter of the global smartphone market share, as previously stated. That's because in America, Apple controls a bit more than half of the market share. 
+iOS is the software powering iPhones, Apple's flagship personal computing device. For Americans, it may come as a surprise that iOS only owns about a quarter of the global smartphone market share, as previously stated. In America, Apple controls a bit more than half of the market share. 
 
 {% include image.html url="/images/iosandroid/usstats.png" description="United States market share of mobile operating systems 2024<sup>3</sup>" percentage="80" %}
 
@@ -41,13 +39,15 @@ And because only one company produces the phones and software, it may appear tha
 </div>
 <script type="module" src="https://www.appbrain.com/widgets/stats.js"></script>
 
-In the United States, Samsung, followed by Google Pixel, lead the market. Google Pixel is the only device that uses the stock Android OS since Google also maintains the Android Open Source Project (AOSP). Most other OEMs add additional features and modifications to the Android OS. Some manufacturers change Android so much they are marketed as brand new - like Xiaomi's HyperOS, Vivo's Funtouch OS, and Oppo's ColorOS.
+In the United States, Samsung, followed by Google Pixel, lead the market. Google Pixel is the only device that uses stock Android OS since Google also maintains the Android Open Source Project (AOSP). Most other OEMs add additional features and modifications to the Android OS. Some manufacturers change Android so much they are marketed as brand new - like Xiaomi's HyperOS, Vivo's Funtouch OS, and Oppo's ColorOS.
 
 {% include image.html url="/images/iosandroid/hyperos.png" description="Xiaomi HyperOS - AKA iOS on Android" percentage="80" %}
 
 Some organizations build devices running Android for purposes other than personal phones, such as Honeywell, which has an entire line of ["Mobile Handheld Computers"](https://automation.honeywell.com/us/en/products/productivity-solutions/mobile-computers/handheld-computers) built for industrial use cases. The diversity in the Android device marketplace leads into the topic of software update consistency and timeliness, an important factor to consider when evaluating the security posture of mobile operating systems.
 
 ## Security Patching
+
+#### iOS Architecture
 
 iOS is a monolithic architecture, meaning every major component is built by Apple across both the software and hardware. The operating system is composed of the following layers starting from the lowest level:
 
@@ -56,9 +56,11 @@ iOS is a monolithic architecture, meaning every major component is built by Appl
 3. Media: Handles graphics and audio rendering and processing
 4. Cocoa Touch: API to create native iOS apps by providing access to hardware and software features like user interface elements or the camera
 
-Because Apple controls the entire technology stack of their products, their update process is very streamlined. Since iOS 16.4.1, Apple also implemented [Rapid Security Responses](https://support.apple.com/en-us/102657) to quietly push critical bug fixes in between standard iOS updates. The full list of security updates for all Apple products can be seen on a single web page on the Apple website. 
+Because Apple controls the entire technology stack of their products, their update process is very streamlined. Since iOS 16.4.1, Apple also implemented [Rapid Security Responses](https://support.apple.com/en-us/102657) to quietly push critical bug fixes in between standard iOS updates. The full list of security updates for all Apple products can be seen on a single web page on the Apple website.
 
 {% include image.html url="/images/iosandroid/iosupdates.png" description="Beginning of the Apple security update list at time of writing<sup>7</sup>" percentage="80" %}
+
+#### Android Architecture
 
 The security update process for Android is not as simple. The platform is composed of several layers, each managed by different entities.
 
@@ -70,18 +72,26 @@ Android is built on the [Linux kernel](https://github.com/torvalds/linux), which
 
 Applications run in the Android Runtime (ART) virtual machine, which compiles Java bytecode to native machine code and provides a layer of separation between the application and the operating system. The Android Framework defines higher-level Java APIs that allow applications to access OS features like the UI (View class), Location Services, and inter-application communication (Content Providers). 
 
-As previously mentioned, OEMs often customize every layer of the Android stack to add their own proprietary features. For example, Samsung has developed some additional capabilities into the Android OS that they release with their devices, such as:
+#### OEM Customization
+
+As previously mentioned, OEMs often customize every layer of the Android stack to add their own proprietary features. Tweaks may be added to ensure only a specific cellular service can be used for devices sold through the carrier, like restricting the SIM card or the bootloader to prevent users from flashing custom ROMs. The operating system is also often modified to gain a competitive advantage over other manufacturers. For example, Samsung has developed some additional capabilities into the Android OS that they release with their devices, such as:
 
 * One UI: A custom user interface that builds on the Android Framework that provides more modification and accessibility controls.
 * Integration with Samsung devices like the S-Pen - requiring additional HAL drivers and Android Framework components.
 * Samsung Knox: A security platform that secures every layer of the Android stack, similar to endpoint detection and response.
 * System level apps: Samsung installs its own default apps like the Samsung Internet browser, Notes, Pay, Health, and the Galaxy Store.
 
-Because OEMs customize stock Android so much, patch consistency is highly variable. Some OEMs release updates on a consistent basis, while others do not. Additionally, when a vulnerability is discovered in core Android components, it may take months for the vulnerability to be patched, as the update to the upstream AOSP must be modified to fit the specific vendor's implementation. The [Mainline project](https://source.android.com/docs/core/ota/modular-system) aims to address this issue. Starting with Project Treble, components of the Android framework were divided into modules that could be updated outside the normal Android releases. Mainline extended this to include critical components like Bluetooth, DNS Resolver, Media Codecs, Network Stack, PermissionController, and Wi-Fi, that are often the target of the most severe vulnerabilities. The complete list of supported Mainline modules can be seen on the Mainline page linked above.
+Because OEMs customize stock Android so much, patch consistency is highly variable. Some OEMs release updates on a predictable basis, while others do not. A 2024 [research paper on Android Security Updates](https://research.google/pubs/50-shades-of-support-a-device-centric-analysis-of-android-security-updates/) published by Google (so take it with a grain of salt) found that Samsung releases monthly updates for newer models but then begins to decrease in frequency over time. Xiaomi and Oppo release security patches quarterly more often and have shorter device support periods. And Google Pixel releases security patches every month throughout their device lifespans regardless of region.
+
+When a vulnerability is discovered and fixed in the AOSP, it may take months for the fix to be implemented by OEMs, as it must be modified to fit the specific vendor's implementation. Cellular carriers may also need to test the updates to ensure they are compatible with their networks, contributing to the delay in releases. 
+
+#### Project Mainline
+
+The [Mainline project](https://source.android.com/docs/core/ota/modular-system) aims to address this issue. Starting with Project Treble, components of the Android framework were divided into modules that could be updated outside the normal Android releases. Mainline extended this to include critical components like Bluetooth, DNS Resolver, Media Codecs, Network Stack, PermissionController, and Wi-Fi, that are often the target of the most severe vulnerabilities. The complete list of supported Mainline modules can be seen on the Mainline page linked above.
 
 {% include image.html url="/images/iosandroid/mainline.png" description="Mainline architecture" percentage="80" %}
 
-In order for devices to receive Mainline updates, they must have Google Mobile Services (GMS) enabled. Updates are distributed through the Google Play Store, which requires GMS to be enabled. GMS is a requirement for Android devices to be certified under the Android Enterprise Partner Program. The program helps inform enterprise customers about the quality and reliability of their mobile fleet. The question then is, are most Android devices certified under the Android Enterprise Partner Program? Well it depends. The most popular Android device manufacturers are listed as trusted partners on the Android Enterprise website, however the requirements for device manufacturers do not appear to be as stringent as individual devices. The link to the partner program requirements for OEMs and devices is broken on the [Google developer](https://developers.google.com/android/enterprise) site as of January 2025.
+In order for devices to receive Mainline updates, they must have Google Mobile Services (GMS) enabled. Updates are distributed through the Google Play Store, which requires GMS to be enabled. GMS is a requirement for Android devices to be certified under the Android Enterprise Partner Program. The program informs enterprise customers about the quality and reliability of devices to include in their mobile inventory. The question then is, are most Android devices sold to consumers certified under the Android Enterprise Partner Program? Well, it depends. The most popular Android device manufacturers are listed as trusted partners on the Android Enterprise website, however, the requirements for device manufacturers do not appear to be as stringent as individual devices. The link to the partner program requirements for OEMs and devices is broken on the [Google developer](https://developers.google.com/android/enterprise) site as of January 2025.
 
 {% include image.html url="/images/iosandroid/developer-site.png" description="Trying to find the Android Enterprise Partner Program requirements on the Google developer site" percentage="80" %}
 
@@ -93,11 +103,27 @@ However, the device manufacturers page is bare.
 
 {% include image.html url="/images/iosandroid/oem-requirements.png" description="Where are the requirements?<sup>13</sup>" percentage="80" %}
 
-My suspicion for this lack of transparency is that Google services are banned in China, so devices sold in that market cannot be certified. However, some Chinese manufacturers still want to participate in other markets, so the devices they sell in other countries do have GMS enabled and receive critical updates. As a result, manufacturers that produce devices that pass the certification process are considered an enterprise partners.
+My suspicion for this lack of transparency is that Google services are banned in China, so devices sold in that market cannot be certified. However, some Chinese manufacturers still want to participate in other markets, so the devices they sell in other countries do have GMS enabled and receive critical updates. As a result, manufacturers that produce any devices that pass the certification process are considered an enterprise partner. It's also possible some companies produce devices for specialized industries that cannot satisfy the device requirements of the Android Enterprise Partner Program, but are given partner status as manufacturers because of their reputation.
 
-In general, most Android devices do receive timely critical patches thanks to the Mainline project, however devices sold in certain countries that restrict access to Google services are entirely dependent on the OEM to release updates (and are likely subject to backdoors placed by the OEM required by those governments).
+In general, most Android devices purchased by standard consumers do receive timely security patches for many critical Android framework components thanks to Project Mainline. However, devices sold in countries that restrict access to Google services are entirely dependent on the OEM to release updates (but are likely subject to backdoors anyway, required by those governments to be placed by the OEMs). Also, according to the [Android Security Update Research Paper](https://www.ndss-symposium.org/wp-content/uploads/2024-175-paper.pdf) previously mentioned, the researchers found that Mainline updates only include the "partial security patch level (SPL)" published in the monthly Android Security Bulletins. The complete SPL includes CVEs identified in proprietary components at the hardware level of many Android phones like Qualcomm and MediaTek chips (page 3). The researchers found that only Google Pixel releases the complete SPL each month. 
 
 ## Vulnerability Research
+
+So, for the most part, both platforms have an efficient method of delivering critical security patches to end-users, with some variation between manufacturers. However, the question remains - which platform is more likely to be exploited? Specifically, by the kind of advanced attacks that require limited interaction from the user or physical access to the device - the kind you can do nothing to prevent? To determine this, we can only look at historical data, and make an educated guess.
+
+One thing is certain - both platforms, iOS and Android, are riddled with security bugs. This has nothing to do with the quality of the engineers building the platforms, they are obviously world-class. It's simply a result of the size and rate of change of the codebases. Both are extremely mature platforms that are constantly being improved, modified, and built on. Even if a product has a small vulnerability density (number of vulnerabilities per lines of code), as the codebase grows, so too does the number of bugs.
+
+#### Research Accessibility
+
+Apple products are completely closed source. No one has access to the iOS source code except for Apple employees. Apple does have a bug bounty program, like most major organizations at this point, and pays big bounties for flaws found in their products. They also implemented the [Security Research Device Program](https://security.apple.com/research-device/) to provide researchers with a modified device that allows access to operating system internals and allows bypasses to certain restrictions. However, this program is very restricted and has limited application windows.
+
+Jailbreaking iOS devices is very difficult and the latest versions rarely ever have a working jailbreak available to the public anymore. Although a jailbreak is in itself a major security flaw, it also makes it easier for researchers to find other issues. [Corellium](https://www.corellium.com/) is a virtual mobile device platform that can be used for vulnerability research on the latest iOS, but the emulators are still not the ideal environment. Corellium devices are reverse engineered versions of iOS and some software components (like iMessage and phone calls) do not work since they are technically in violation of Apple terms of use. Regardless, no one but Apple has source code access.
+
+Conversely, Android is completely open source, save individual OEM device drivers and Google Mobile Services. The source code of the platform can be browsed on [Android Code Search](https://cs.android.com/android), and includes all levels of the OS from the kernel to the Android Runtime. This makes vulnerability research very accessible to anyone with the skills and drive to find bugs in Android. That being said, Android is a very mature platform so finding major bugs is very difficult and requires talented researchers. But anyone who has done product security testing with and without source code understands the significance of having source code and how much faster vulnerabilities can be identified.
+
+#### Security Bulletins
+
+Comparing 
 
 ___ compare ios security updates to android___
 ___https://support.apple.com/en-us/121837___
@@ -112,7 +138,7 @@ ___ discuss how exploits chain together vulnerabilities ___
 ___ get examples of big exploits on ios and android like pegasus, operation triangulation ___
 ___ mention zerodium ___
 
-## Malware Prevalance
+## Common Malware
 
 __ talk about code signing requirements on ios vs android __
 __ talk about different types of malware on android __
