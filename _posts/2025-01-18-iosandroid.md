@@ -105,7 +105,9 @@ However, the device manufacturers page is bare.
 
 My suspicion for this lack of transparency is that Google services are banned in China, so devices sold in that market cannot be certified. However, some Chinese manufacturers still want to participate in other markets, so the devices they sell in other countries do have GMS enabled and receive critical updates. As a result, manufacturers that produce any devices that pass the certification process are considered an enterprise partner. It's also possible some companies produce devices for specialized industries that cannot satisfy the device requirements of the Android Enterprise Partner Program, but are given partner status as manufacturers because of their reputation.
 
-In general, most Android devices purchased by standard consumers do receive timely security patches for many critical Android framework components thanks to Project Mainline. However, devices sold in countries that restrict access to Google services are entirely dependent on the OEM to release updates (but are likely subject to backdoors anyway, required by those governments to be placed by the OEMs). Also, according to the [Android Security Update Research Paper](https://www.ndss-symposium.org/wp-content/uploads/2024-175-paper.pdf) previously mentioned, the researchers found that Mainline updates only include the "partial security patch level (SPL)" published in the monthly Android Security Bulletins. The complete SPL includes CVEs identified in proprietary components at the hardware level of many Android phones like Qualcomm and MediaTek chips (page 3). The researchers found that only Google Pixel releases the complete SPL each month. 
+In general, most Android devices purchased by standard consumers do receive timely security patches for certain critical Android framework components thanks to Project Mainline. However, devices sold in countries that restrict access to Google services are entirely dependent on the OEM to release updates (but are likely subject to backdoors anyway, required by those governments to be placed by the OEMs). Also, according to the [Android Security Update Research Paper](https://www.ndss-symposium.org/wp-content/uploads/2024-175-paper.pdf) previously mentioned, the researchers found that Mainline updates only include the "partial security patch level (SPL)" published in the monthly Android Security Bulletins. The complete SPL includes CVEs identified in proprietary components at the hardware level of many Android phones like Qualcomm and MediaTek chips (page 3). The researchers found that only Google Pixel releases the complete SPL each month.
+
+However, Project Mainline is not a comprehensive solution, and as we will see, many of the security bugs discovered in Android affect system components are not covered by Google Play system updates (Project Mainline).
 
 ## Vulnerability Research
 
@@ -117,26 +119,41 @@ One thing is certain - both platforms, iOS and Android, are riddled with securit
 
 Apple products are completely closed source. No one has access to the iOS source code except for Apple employees. Apple does have a bug bounty program, like most major organizations at this point, and pays big bounties for flaws found in their products. They also implemented the [Security Research Device Program](https://security.apple.com/research-device/) to provide researchers with a modified device that allows access to operating system internals and allows bypasses to certain restrictions. However, this program is very restricted and has limited application windows.
 
-Jailbreaking iOS devices is very difficult and the latest versions rarely ever have a working jailbreak available to the public anymore. Although a jailbreak is in itself a major security flaw, it also makes it easier for researchers to find other issues. [Corellium](https://www.corellium.com/) is a virtual mobile device platform that can be used for vulnerability research on the latest iOS, but the emulators are still not the ideal environment. Corellium devices are reverse engineered versions of iOS and some software components (like iMessage and phone calls) do not work since they are technically in violation of Apple terms of use. Regardless, no one but Apple has source code access.
+Jailbreaking iOS devices is very difficult, and the latest versions rarely ever have a working jailbreak available to the public anymore. Although a jailbreak is in itself a major security flaw, it also makes it easier for researchers to find other issues. [Corellium](https://www.corellium.com/) is a virtual mobile device platform that can be used for vulnerability research on the latest iOS, but the emulators are still not the ideal environment. Corellium devices are reverse engineered versions of iOS and some software components (like iMessage and phone calls) do not work since they are technically in violation of Apple terms of use. Regardless, no one but Apple has source code access.
 
-Conversely, Android is completely open source, save individual OEM device drivers and Google Mobile Services. The source code of the platform can be browsed on [Android Code Search](https://cs.android.com/android), and includes all levels of the OS from the kernel to the Android Runtime. This makes vulnerability research very accessible to anyone with the skills and drive to find bugs in Android. That being said, Android is a very mature platform so finding major bugs is very difficult and requires talented researchers. But anyone who has done product security testing with and without source code understands the significance of having source code and how much faster vulnerabilities can be identified.
+Conversely, Android is completely open source, save individual OEM device drivers and Google Mobile Services. The source code of the platform can be browsed on [Android Code Search](https://cs.android.com/android), and includes all levels of the OS from the kernel to the Android Runtime. Many off-the-shelf Android phones can also easily be rooted, allowing for more visibility into the internals of the device. This makes vulnerability research very accessible to anyone with the skills and drive to find bugs in Android. That being said, Android is a very mature platform so finding major bugs is very difficult and requires talented researchers. But anyone who has done product security testing with and without source code understands the significance of having source code and how much faster vulnerabilities can be identified.
+
+{% include image.html url="/images/iosandroid/art-code.png" description="Android Runtime initialization methods<sup>16</sup>" percentage="80" %}
 
 #### Security Bulletins
 
-Comparing 
+Comparing recent security bulletins from Apple and AOSP, we may be able to draw some conclusions. However, this is anecdotal evidence and by no means a comprehensive analysis of the thoroughness of vulnerability discovery across the two platforms.
 
-___ compare ios security updates to android___
-___https://support.apple.com/en-us/121837___
-___https://source.android.com/docs/security/bulletin/2025-01-01___
-___ mention ios research program ___
-___ discuss severity and size of security bulletins ___
-___ discuss how the more vulnerabilities found the more secure the platform is ___
-___ discuss how exploits chain together vulnerabilities ___
+The Apple security update issued on January 27th, 2025 for iOS 18.3 included 27 CVEs across different iOS components like AirPlay, WebKit, CoreAudio, and others. The previous security update for iOS was released on December 11th, 2024 for iOS 18.2 which included 36 CVEs affecting Apple software and follows the update before released on November 19th, 2024, together making up about 2 months of updates.
+
+The January 2025 Android security bulletin includes vulnerabilities discovered during December 2024 and includes 26 CVEs affecting the most recent AOSP versions (12 through 15) specifically and not third party products. The majority of these vulnerabilities affect core Android system and framework components. Only two of them are Google Play system updates covered by Project Mainline modules, specifically the Documents UI and Permission Controller. The December 2024 bulletin includes only 6 vulnerabilities in the AOSP.
+
+{% include image.html url="/images/iosandroid/december-bulletin.png" description="December Android security bulletin<sup>20</sup>" percentage="80" %}
+
+Granted, two months of data is nothing compared to the entire history of these platforms. Retrieving the metrics of all vulnerabilities found in the platforms would be a tedious task (that AI agents would be useful for). However, we can learn about the general nature of the security updates. The number of disclosed CVEs does not necessarily indicate a more vulnerable platform or robust vulnerability discovery program. I would predict iOS to have far more CVEs than Android since Apple built the operating system from scratch along with many additional features to allow iPhones to more easily interoperate with other Apple products (and make it more difficult to switch to Android).
+
+What is noticeable about the advisories are the severity of the bugs fixed in the updates. The Android security bulletins include at a minimum high severity bugs, mainly relating to privilege escalation and remote code execution. The January 2025 bulletin includes five "critical" severity issues according to the AOSP, with CVSS scores mainly in the high eights since most of the bugs are exploitable over the local IP network as opposed to wide area network delivery methods like SMS and phone calls.
+
+{% include image.html url="/images/iosandroid/cve-2024-49747.png" description="CVE-2024-49747 - remote code execution in Android caused by an out-of-bounds write<sup>21</sup>" percentage="80" %}
+
+The iOS security updates include bugs that are generally not as severe. The majority of them are related to unexpected app termination or denial-of-service with many requiring user interaction or physical device access, equating to mainly medium level CVSS scores. There are a few arbitrary code execution bugs, but these also require user interaction, diminishing their severity.
+
+{% include image.html url="/images/iosandroid/cve-2024-54499.png" description="CVE-2024-54499 - arbitrary code execution in iOS using a maliciously crafted image exploiting a use-after-free bug<sup>21</sup>" percentage="80" %}
+
+CVSS scores alone don't paint the full picture. A vulnerability may be critical according to its CVSS score, but may only be exploitable under very specific conditions and with limited reliability, reducing its actual risk. However, attacks carried out by APTs and other sophisticated threat actors often chain together several zero-day exploits to gain full control of a device. It is possible that the general severity of issues that are regularly fixed in Android compared to iOS reduces the likelihood of logical attack vectors being available to attackers targeting Android with zero or one-click exploits. Without being an APT and having an arsenal of exploits at our disposal, we can only look at previous attacks on mobile devices to ascertain which operating system is more susceptible to advanced threats. 
 
 ## Exploit History
 
-___ get examples of big exploits on ios and android like pegasus, operation triangulation ___
-___ mention zerodium ___
+As we will see, the Android malware ecosystem is far more virulent than iOS since there are no restrictions on the type of programs users can install on their devices, similar to PCs. However, which platform has been the subject of more advanced zero-click exploits, requiring no interaction from the user or installation of malicious applications? Both platforms have undergone significant overhaul since their inception with many new security protections and bug fixes being implemented, so going back five years is more than enough when researching these events.
+
+
+
+One thing to note is that Android devices may also be subject to supply chain exploits from their hardware components, which vary between OEMs and increases the overall attack surface of Android device. Apple is trying to build more of the hardware components of the iPhone in-house and become increasingly self-reliant, and is planning on ditching Broadcom which provides its Bluetooth and Wi-Fi chips in 2025. This may or may not make iPhones more secure, but should be considered if someone trusts Apple's reputation more than common chipset manufacturers.
 
 ## Common Malware
 
@@ -147,7 +164,7 @@ __ talk about different types of malware on android __
 
 
 ## References
-The inspiration for this blog post and much of its information came from [SANS SEC575](https://www.sans.org/cyber-security-courses/ios-android-application-security-analysis-penetration-testing/): iOS and Android Application Security Analysis and Penetration Testing, taught by Jeroen Beckers.
+The inspiration for this blog post and some of its information comes from [SANS SEC575](https://www.sans.org/cyber-security-courses/ios-android-application-security-analysis-penetration-testing/): iOS and Android Application Security Analysis and Penetration Testing, taught by Jeroen Beckers.
 
 [1. Time Spent Using Smartphones 2024](https://explodingtopics.com/blog/smartphone-usage-stats) \
 [2. Mobile Operating System Market Share Worldwide](https://gs.statcounter.com/os-market-share/mobile/worldwide) \
@@ -164,3 +181,12 @@ The inspiration for this blog post and much of its information came from [SANS S
 [13. Android Enterprise OEM Glossary](https://androidenterprisepartners.withgoogle.com/glossary/device-manufactures/) \
 [14. GMS certification: A complete guide from requirements to submission](https://emteria.com/learn/google-mobile-services) \
 [15. Is Android Enterprise supported in China?](https://bayton.org/android/android-enterprise-faq/is-android-enterprise-supported-in-china/) \
+[16. AndroidRuntime.cpp](https://cs.android.com/android/platform/superproject/main/+/main:frameworks/base/core/jni/AndroidRuntime.cpp) \
+[17. About the security content of iOS 18.3 and iPadOS 18.3](https://support.apple.com/en-us/122066) \
+[18. About the security content of iOS 18.2 and iPadOS 18.2](https://support.apple.com/en-us/121837) \
+[19. Android Security Bulletin January 2025](https://source.android.com/docs/security/bulletin/2025-01-01) \
+[20. Android Security Bulletin December 2024](https://source.android.com/docs/security/bulletin/2024-12-01) \
+[21. NIST NVD: CVE-2024-49747 Detail](https://nvd.nist.gov/vuln/detail/CVE-2024-49747) \
+[22. NIST NVD: CVE-2024-54499 Detail](https://nvd.nist.gov/vuln/detail/CVE-2024-54499) \
+[23. Apple nears switch to in-house Bluetooth and Wi-Fi chip for iPhone, smart home, Bloomberg reports](https://www.reuters.com/technology/apple-nears-switch-in-house-bluetooth-wi-fi-chip-iphone-smart-home-bloomberg-2024-12-12/) \
+[. Operation Triangulation: The last (hardware) mystery](https://securelist.com/operation-triangulation-the-last-hardware-mystery/111669/)
