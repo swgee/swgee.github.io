@@ -152,16 +152,30 @@ Nation-states likely have a harder time gaining covert remote access to a fully 
 
 #### Android Malware
 
-For an application to be installed on Android, it must be self-signed by the developer. That's it. This is only to prevent existing apps with the same package name from being overwritten, like during application updates, not to verify the identity of the developer. For this reason, many fake versions of popular applications exist that share the same name as the legitimate version. As long as the legitimate version is not already installed, the fake one can be installed, and a user's credentials for that application may be stolen when they log in.
+For an application to be installed on Android, it must be self-signed by the developer. That's it. This is only to prevent existing apps with the same package name from being overwritten, like during application updates, not to verify the identity of the developer. For this reason, many fake versions of popular applications exist that share the same name as the legitimate version. As long as the legitimate version is not already installed, the fake one can be installed, and a user's credentials for that application may be stolen when they log in. Devices purchased from sketchy sources may also be preloaded with malware and fake versions of popular applications.
 
-Android applications are bundled into APK files, which can be sent over any communication medium such as email, text, instant messaging, websites, etc. The APK can be installed directly from downloads. Third-party app stores also exist which do little to nothing to filter out malware and scams. There are many well-known Android malware sprains that propagate using these methods and engage in all sorts of nastiness such as infostealing, cryptomining, and banking theft. However, in addition to having to be first installed by the user, the application often needs to request additional permissions to perform its tasks. Application permissions are divided into three major categories:
+Android applications are bundled into APK files, which can be sent over any communication medium such as email, text, instant messaging, websites, etc. The APK can be installed directly from downloads. Third-party app stores also exist which do little to nothing to filter out malware and scams. There are many well-known Android malware sprains that propagate using these methods and engage in all sorts of nastiness such as infostealing, cryptomining, and banking theft. However, in addition to having to be first installed by the user, the application often needs to request additional permissions to perform its tasks. Below are the three major permissions categories along with some examples:
 
 * **Normal**: Granted automatically and don't have any major security concern
     * Internet Access, Flashlight, Vibrate, Modify Audio Settings, etc.
 * **Dangerous**: User is prompted to allow or deny
     * Divided into 15 groups such as Camera access, Microphone, Location, Contacts, etc.
 * **Special**: Must be manually granted in device settings
-    * BIND_DEVICE_
+    * BIND_DEVICE_ADMIN: Set passcode, lock device, wipe device
+    * SYSTEM_ALERT_WINDOW: Draw on user's screen (automatically granted to Play Store apps)
+    * BIND_ACCESSIBILITY_ADMIN: Automate keystrokes, retrieve window and text content
+
+Google has implemented some protections to mitigate the threat of Android malware. They regularly audit applications submitted to the Play Store for malicious behavior, however often fall short. One application, iRecorder, was uploaded to the Play Store in September 2021 without any malicious functionality. The developers added the AhMyth remote access trojan (RAT) in August 2022, which went undetected until May 2023 after the App was downloaded more than 50,000 times.
+
+Google Play Protect is a feature of Google Mobile Services that essentially acts as EDR for Android phones. It performs the malware screening for Play Store apps and can remotely scan sideloaded applications. It also helps locate lost devices and remote wipe if needed. However, like any EDR/antivirus, it is often bypassed, especially by less common payloads or new versions of existing malware and obfuscation techniques that Google has yet to create detections for.
+
+#### iOS Malware
+
+Unlike Android, the standard iOS malware ecosystem is very limited. This is mainly due to iOS code signing requirements. All code executed on non-jailbroken iPhones must be signed by Apple, including the operating system itself. The BootROM in the CPU contains Apple's public key, which is used to validate the signature of the bootloader, iBoot engine, and the kernel. A vulnerability in the BootROM on Apple chips before A12 allowed this signature validation to be bypassed, paving the way for unpatchable, hardware-level jailbreaks on those devices. 
+
+{% include image.html url="/images/iosandroid/codesigning.png" description="iOS chain of trust" percentage="80" %}
+
+That same public key is used to verify the signature of every application downloaded from the Apple App store, which is signed by Apple's private key. Apple performs very strict screening on applications submitted to the App store, and unlike Google Play, malware is short lived if it begins behaving maliciously after being accepted. Unlike Android apps, iOS apps cannot remotely download additional libraries and execute them since they will not be signed by Apple. 
 
 
 ## Conclusion
@@ -204,5 +218,9 @@ The inspiration for this blog post comes from [SANS SEC575](https://www.sans.org
 * [Zero-Day Marketplace Explained: How Zerodium, BugTraq, and Fear contributed to the Rise of the Zero-Day Vulnerability Black Market](https://lab.wallarm.com/zero-day-marketplace-explained-how-zerodium-bugtraq-and-fear-contributed-to-the-rise-of-the-zero-day-vulnerability-black-market/)
 * [Serbia: Authorities using spyware and Cellebrite forensic extraction tools to hack journalists and activists](https://www.amnesty.org/en/latest/news/2024/12/serbia-authorities-using-spyware-and-cellebrite-forensic-extraction-tools-to-hack-journalists-and-activists/)
 * [The Qualcomm DSP Driver - Unexpectedly Excavating an Exploit](https://googleprojectzero.blogspot.com/2024/12/qualcomm-dsp-driver-unexpectedly-excavating-exploit.html)
-* [Permissions on Android](https://developer.android.com/guide/topics/permissions/overview) \
-
+* [Permissions on Android](https://developer.android.com/guide/topics/permissions/overview)
+* [Google Play malware clocks up more than 600 million downloads in 2023](https://usa.kaspersky.com/blog/malware-in-google-play-2023/29356/)
+* [Google Play Protect: On-device Protections](https://developers.google.com/android/play-protect/client-protections)
+* [Analysis and Reproduction of iPhone BootROM Exploit: Checkm8](https://ritcsec.wordpress.com/2020/04/28/analysis-and-reproduction-of-iphone-bootrom-exploit-checkm8/)
+* [App code signing process in iOS, iPadOS, tvOS, watchOS, and visionOS](https://support.apple.com/guide/security/app-code-signing-process-sec7c917bf14/web)
+* [Face Off: Group-IB identifies first iOS trojan stealing facial recognition data](https://www.group-ib.com/blog/goldfactory-ios-trojan/)
