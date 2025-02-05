@@ -8,8 +8,6 @@ article_header:
 cover: /images/iosandroid/header.jpg
 ---
 
-## Introduction
-
 Smartphones constitute the largest digital attack surface in modern society - over half the global population and most people in the developed world own one. Mobile applications are heavily relied on for everything we do, be it communication, banking, media, navigation, photos, etc. The average person spends four to five hours a day using their phone. They are a part of us. We are cyborgs without a physical link between our mechanical and biological components (for now).
 
 The two dominant platforms are Android and iOS. Combined, 99.5% of smartphones run either operating system - most app developers support no other legitimate choices. Android dominates the global market share at about 73.5%, with iOS at 26%. 

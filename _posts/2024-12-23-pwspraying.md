@@ -347,3 +347,5 @@ if __name__ == "__main__":
 To summarize, we created a proxy for the target site using AWS API Gateway and Fireprox. We then created match and replace rules in Burp Suite to ensure all requests were forwarded to the correct location on the target site. Finally, we created a Python script that uses Selenium to automate login attempts and save screenshots of the login results.
 
 This methodology can be used as a guideline to perform password spraying attacks. Every site is different, so the exact implementation of each step will vary and require sufficient testing. Thanks for reading, I hope you found this useful or learned something new!
+
+*Thank you [TLDRsec](https://tldrsec.com/p/tldr-sec-261) for featuring this blog post!*
