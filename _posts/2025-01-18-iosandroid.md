@@ -171,20 +171,38 @@ Google Play Protect is a feature of Google Mobile Services that essentially acts
 
 #### iOS Malware
 
-Unlike Android, the standard iOS malware ecosystem is very limited. This is mainly due to iOS code signing requirements. All code executed on non-jailbroken iPhones must be signed by Apple, including the operating system itself. The BootROM in the CPU contains Apple's public key, which is used to validate the signature of the bootloader, iBoot engine, and the kernel. A vulnerability in the BootROM on Apple chips before A12 allowed this signature validation to be bypassed, paving the way for unpatchable, hardware-level jailbreaks on those devices. 
+Unlike Android, the standard iOS malware ecosystem is very limited. This is mainly due to iOS code signing requirements. All code executed on non-jailbroken iPhones must be signed by Apple, including the operating system itself. The BootROM in the CPU contains Apple's public key, which is used to validate the signature of the bootloader, iBoot engine, and the kernel. The checkm8 vulnerability in the BootROM on Apple chips before A12 allowed signature validation using the Apple' public key to be skipped, paving the way for unpatchable, hardware-based jailbreaks on all affected devices.
 
 {% include image.html url="/images/iosandroid/codesigning.png" description="iOS chain of trust" percentage="80" %}
 
-That same public key is used to verify the signature of every application downloaded from the Apple App store, which is signed by Apple's private key. Apple performs very strict screening on applications submitted to the App store, and unlike Google Play, malware is short lived if it begins behaving maliciously after being accepted. Unlike Android apps, iOS apps cannot remotely download additional libraries and execute them since they will not be signed by Apple. 
+That same public key is used to verify the signature of every application downloaded from the Apple App store, which is signed by Apple's private key. Apple performs very strict screening on applications submitted to the App store, and unlike Google Play, malware is short lived if it begins behaving maliciously after being accepted. Unlike Android apps, iOS apps cannot remotely download additional libraries and execute them since they will not be signed.
+
+Only developer and enterprise applications can be installed official Apple repositories on a non-jailbroken device. Developer certificates signed by Apple and provided to individuals with an Apple account. Apps signed with the developer certificate are tied to a unique device identifier (UDID) to be installed on a specific device for testing. This makes it impossible to widely distribute a developer signed application, as an attacker would need to create separate versions for every target device, in addition to the devices manually importing the developer profile.
+
+Enterprise-signed applications are more easily used to spread malware. Enterprise certificates are issued by Apple to organizations with more than 100 employees to distribute internal applications on company devices. Apple tightly controls this program and thoroughly vets each participating organization. If any wrongdoing is detected, such as sharing internal apps externally or enterprise-signed applications behaving maliciously, Apple can revoke the certificate at any time.
+
+A recent example is a strain of iOS malware dubbed "GoldPickaxe.iOS" being distributed in Vietnam and Thailand. One of its delivery methods was via TestFlight, Apple's beta testing platform, which has looser vetting processes than the App store. Victims would have to accept an invite to join the attacker's testing program and install TestFlight. The other installation method was in conjunction with enterprise certificates. Attackers would distribute an enterprise-signed version of the app along with the enterprise profile to install on victim devices. The attackers likely joined the Apple Enterprise Program fraudently, or perhaps stole another organization's private key.
+
+{% include image.html url="/images/iosandroid/goldpickaxe.webp" description="GoldPickaxe delivery methods" percentage="80" %}
+
+The GoldPickaxe malware itself, unlike many Android malware apps, is limited in its access into iOS. iOS lacks some of the dangerous permissions available to Android applications to request. It masquerades as a government application and asks the user for official documentation and facial recordings. The malware operators use this information to gain access to victim's bank accounts. It can also retrieve SMS messages from phone numbers outside the user's contact list in order to retrieve MFA codes, which legitimate iOS apps also do to speed up the user login process.
 
 
 ## Conclusion
 
-__ ios is better for grandma __
-__ the country you live in and the people that would target you matters a lot, for example if you are a chinese citizen you can't even get access to the most secure systems, and if FVEY wants to spy on you they will be able to by working with companies to install backdoors in software like GMS __
-__ no system is 100% secure and private __
-__ if you don't want to use carrier pigeons, your best bet is android since it's likely more secure from advanced exploits, specifically google pixel. ideally sms, phone calls, bluetooth should be disabled so the phone is less of a server __
-__security vendor cve issue __
+iOS, unlike Android, is a thoroughly locked down platform. Users do not have full control over their device. This makes it much harder to be infected with common malware or to accidentally brick your phone. While it is historically more susceptible to advanced attacks, the average user usually has nothing to worry about and is too boring for an APT to use a zero-day exploit on. For this reason, iOS is the preferred choice for users that may not be as security conscious, such as teenagers or the elderly.
+
+For average users that are familiar with social engineering and practice good security hygiene, it really doesn't matter which platform you use. Android is really more like owning a pocket-sized PC. Many people own laptops that allow them administrative privileges to install anything they want, including viruses. Android is the same thing - with great power comes great responsibility.
+
+However, for someone that may be targeted by advanced threats like government agencies, perhaps a journalist, politician, or freedom fighter, the platform you choose and how it is configured matters. Generally speaking, Android has a better reputation for being harder for Nation-states/APTs to hack. I believe open source is generally more secure, which may explain why we see less sophisticated Android hacks than iOS. For the best protection, externally facing services like SMS/RCS, cellular phone calls, and bluetooth should be disabled. These services are often targeted remotely, similar to web servers hosted on the internet.
+
+The country you live in and the government that wants to target you also matters. If you live in western countries and are targeted by countries not aligned to western powers, for example, China, you may be better protected. Many of the exploit development companies that supply to government customers are located in western countries. While there are instances of these products being misused, exploit developers are often subject to export regulations, and likely have no desire to sell to adversarial countries anyway. Western adversaries like China, Russia, Iran, etc. must rely on their own R&D efforts. 
+
+A device built in western countries is also probably more secure than one built in China. Chinese companies can be forced by their government to install backdoors. For this reason, Samsung and Google Pixel phones are more reliable than phones made in China. Google Pixel has the added advantage of being designed by the same company that maintains the AOSP, making it more reliable at quickly fixing security issues. Unfortunately, these phones are not available to everyone, such as citizens of countries that are misaligned with western powers and ban products they cannot influence.
+
+Even for western citizens that can purchase and use the latest and greatest Google Pixel or Samsung Galaxy, if a western power wants to hack your phone, they probably can. While companies may try to resist, the government often compels them to do their bidding, citing national security concerns and legal loopholes. Android may be open source, but there are plenty of components that are not, like hardware drivers and Google Mobile Services. GMS can theoretically be abused by Google to exfiltrate data on the device. After all, it operates with system level permissions in order to install security patches.
+
+At the end of the day, no system is 100% secure. There will also be vulnerabiltiies,  
 
 ## References
 The inspiration for this blog post comes from [SANS SEC575](https://www.sans.org/cyber-security-courses/ios-android-application-security-analysis-penetration-testing/): iOS and Android Application Security Analysis and Penetration Testing, taught by Jeroen Beckers.
@@ -224,3 +242,5 @@ The inspiration for this blog post comes from [SANS SEC575](https://www.sans.org
 * [Analysis and Reproduction of iPhone BootROM Exploit: Checkm8](https://ritcsec.wordpress.com/2020/04/28/analysis-and-reproduction-of-iphone-bootrom-exploit-checkm8/)
 * [App code signing process in iOS, iPadOS, tvOS, watchOS, and visionOS](https://support.apple.com/guide/security/app-code-signing-process-sec7c917bf14/web)
 * [Face Off: Group-IB identifies first iOS trojan stealing facial recognition data](https://www.group-ib.com/blog/goldfactory-ios-trojan/)
+* [Apple Developer Enterprise Program](https://developer.apple.com/programs/enterprise/)
+* [Distributing your app for beta testing and releases](https://developer.apple.com/documentation/xcode/distributing-your-app-for-beta-testing-and-releases)
