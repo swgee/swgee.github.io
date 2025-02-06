@@ -126,6 +126,8 @@ CVSS scores alone don't paint the complete picture. A vulnerability may be criti
 
 As we will see, the Android malware ecosystem is far more virulent than iOS since, like a PC, there are fewer limitations on which applications can be installed. However, which platform has been the subject of more advanced zero-click attacks?
 
+#### iOS Hacks
+
 It's fairly well known that iOS has long been the target of Pegasus spyware developed by NSO Group. Exploits such as KISMET, FORCEDENTRY, and BLASTPASS have been giving NSO Group customers access to their targets' iPhones for several years by exploiting attack vectors like iMessage, Safari links, Find My, and other native iOS features. There are countless articles about these attacks, and they don't seem to be slowing down anytime soon. [Citizen Lab](https://citizenlab.ca/) has been tracking Pegasus for years and regularly releases reports on Pegasus targets and technical details.
 
 In 2023, Kaspersky researchers discovered a sophisticated iOS hacking campaign they dubbed "[Operation Triangulation](https://securelist.com/operation-triangulation-the-last-hardware-mystery/111669/)" targeting mainly Russian citizens and officials. The malware, called "TriangleDB", was (again) delivered via malicious iMessage attachments, and included a series of four zero-days to achieve full device compromise.
@@ -135,6 +137,8 @@ In 2023, Kaspersky researchers discovered a sophisticated iOS hacking campaign t
 Apple has created additional security measures around iMessage, such as [BlastDoor](https://support.apple.com/guide/security/blastdoor-for-messages-and-ids-secd3c881cee/web), which Apple vaguely describes as additional sandboxing and memory protection. Time will tell if iOS continues to fall victim to more spyware. Also, iOS full device compromises have been historically cheaper than Android on the zero-day black market. While zero-day prices are, obviously, not as accurately measured as the S&P 500, zero-day brokers like Zerodium (which closed down in 2024) have advertised higher bounties for Android Full Compromise with Persistence (FCP) packages than iOS. 
 
 {% include image.html url="/images/iosandroid/zerodium.webp" description="Zerodium payout table" percentage="80" %}
+
+#### Android Hacks
 
 Android zero-click exploits appear less common in the wild than iOS, but they still exist. As we have seen, plenty of remote code execution bugs are found in the AOSP, such as [CVE-2024-49415](https://thehackernews.com/2025/01/google-project-zero-researcher-uncovers.html), can be exploited by a crafted RCS message sent on Google Messages. Occasionally, Android security bulletins will also advise whether some CVEs are under active exploitation in the wild, such as in the [August 2024 bulletin](https://source.android.com/docs/security/bulletin/2024-08-01) (although Google has provided few additional details).
 
