@@ -16,7 +16,7 @@ opengraph: |
     <meta property="og:type" content="website">
     <meta property="og:title" content="Risk Analysis of the Major Mobile Platforms - Break Code in Case of Emergency">
     <meta property="og:description" content="IntroductionSmartphones constitute the largest digital attack surface in modern society - over half the global population and most people in the developed wo...">
-    <meta property="og:image" content="images/iosandroid/header.jpg">
+    <meta property="og:image" content="https://benkofman.com/images/iosandroid/header.jpg">
 
     <!-- Twitter Meta Tags -->
     <meta name="twitter:card" content="summary_large_image">
@@ -24,7 +24,7 @@ opengraph: |
     <meta property="twitter:url" content="https://benkofman.com/2025/02/06/iosandroid.html">
     <meta name="twitter:title" content="Risk Analysis of the Major Mobile Platforms - Break Code in Case of Emergency">
     <meta name="twitter:description" content="Introduction - Smartphones constitute the largest digital attack surface in modern society - over half the global population and most people in the developed wo...">
-    <meta name="twitter:image" content="images/iosandroid/header.jpg">
+    <meta name="twitter:image" content="https://benkofman.com/images/iosandroid/header.jpg">
 
     <!-- Meta Tags Generated via https://www.opengraph.xyz -->
 ---
