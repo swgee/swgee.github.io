@@ -99,7 +99,7 @@ send(packet, verbose=1)
 
 ### Detective Measures
 
-Monitor network traffic for abnormal connection combinations that do not follow standard flow patterns. Behavioral analytics solutions and stateful firewalls can perform some of this analysis. Create detections around malformed packets that do not conform to their destination port's application protocols. This may assist in finding covert signals attempting to blend in.
+Monitor network traffic for abnormal connection combinations that do not follow standard flow patterns. Behavioral analytics solutions and stateful firewalls can perform some of this analysis. Create detections around malformed packets that do not conform to their destination port's application protocol structure, or packets that originate from the wrong source port (such as NTP datagrams that are not both to and from port 123). This may assist in finding covert signals attempting to blend in.
 
 Alert on untrusted programs that create raw sockets (`AF_INET`,`SOCK_RAW`) or use packet filter libraries. On Windows, detect NDIS (Network Driver Interface Specification) driver installations using the `Get-NetAdapterBinding` PowerShell Cmdlet and monitor for `PF_PACKET` sockets on Linux.
 
