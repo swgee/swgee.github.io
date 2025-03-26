@@ -29,8 +29,6 @@ key: page-about
 
 <img src="assets/images/headshot.jpg" alt="Me" width="100" height="100" style="border-radius: 50%;">
 
-Hey! I'm Ben. I am an InfoSec practitioner passionate about technology's impact on society and culture. 
+Hey there! :wave: Welcome to my blog. This is a place for me to channel my learning into a creative and structured format. Some of the topics I write about that interest me include security architecture, vulnerability research, new developments in tech, and cyber warfare.
 
-I started this blog to capture information on topics I want to learn more about and channel my learning into a creative and structured output while sharing with others. Such subjects include, but are not limited to, security architecture, vulnerability research, new developments in tech, and cyber warfare.
-
-Thanks for visiting. Feel free to reach out and let me know what you think. :space_invader:
+Thanks for visiting! :space_invader:
