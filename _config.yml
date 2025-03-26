@@ -37,7 +37,7 @@ author:
   type      : person # "person" (default), "organization"
   name      : Ben Kofman
   url       :
-  avatar    : https://media.licdn.com/dms/image/v2/D4E03AQHQmGi4hEe9Fg/profile-displayphoto-shrink_800_800/profile-displayphoto-shrink_800_800/0/1721742232325?e=1737590400&v=beta&t=cAxa_joTJ0_uq7gUuz29X-NXeqshl5eaHA1maqtwc8I # path or url of avatar image (square)
+  avatar    : # https://media.licdn.com/dms/image/v2/D4E03AQHQmGi4hEe9Fg/profile-displayphoto-shrink_800_800/profile-displayphoto-shrink_800_800/0/1721742232325?e=1737590400&v=beta&t=cAxa_joTJ0_uq7gUuz29X-NXeqshl5eaHA1maqtwc8I # path or url of avatar image (square)
   bio       : InfoSec Practitioner
   email     :
   facebook  : # "user_name" the last part of your profile url, e.g. https://www.facebook.com/user_name
@@ -48,8 +48,8 @@ author:
   medium    : # "user_name" the last part of your profile url, e.g. https://medium.com/user_name
   zhihu     : # "user_name" the last part of your profile url, e.g. https://www.zhihu.com/people/user_name
   douban    : # "user_name" the last part of your profile url, e.g. https://www.douban.com/people/user_name
-  linkedin  : # # "user_name" the last part of your profile url, e.g. https://www.linkedin.com/in/user_name
-  github    : swgee # "user_name" the last part of your profile url, e.g. https://github.com/user_name
+  linkedin  : # "user_name" the last part of your profile url, e.g. https://www.linkedin.com/in/user_name
+  github    : # "user_name" the last part of your profile url, e.g. https://github.com/user_name
   npm       : # "user_name" the last part of your profile url, e.g. https://www.npmjs.com/~user_name
 
 
