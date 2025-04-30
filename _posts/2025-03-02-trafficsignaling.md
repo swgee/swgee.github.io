@@ -17,7 +17,7 @@ An adversary compromises a system in a target environment and is able to execute
 
 ## How it works
 
-Packets may be sent from another compromised system, like an [internal proxy](https://attack.mitre.org/techniques/T1090/001/), or from attacker infrastructure if the implanted device is externally facing. The running process monitors inbound traffic for signals. The traffic signals may instruct the malware to do something that network defenses look for, like initiatiating a shell with C2. 
+Packets may be sent from another compromised system, like an [internal proxy](https://attack.mitre.org/techniques/T1090/001/), or from attacker infrastructure if the implanted device is externally facing. The running process monitors inbound traffic for signals. The traffic signals may instruct the malware to do something that network defenses look for, like establishing a connection with C2 infrastructure. 
 
 One way to monitor for incoming connections is by inspecting Netstat output periodically, but spawning a child process can be suspicious. This also limits the implant to only fully established connections without the ability to inspect the frame headers or data. If the malware has administrative priviliges, it can monitor all inbound traffic on the system using pcap libraries like `npcap` on Windows or `libpcap` on Linux or create raw sockets. This includes ports in use by other programs, allowing the signals to blend in with standard traffic like SSH, HTTP, or SMB.
 
