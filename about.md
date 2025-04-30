@@ -29,6 +29,6 @@ key: page-about
 
 <img src="assets/images/headshot.jpg" alt="Me" width="100" height="100" style="border-radius: 50%;">
 
-Hey there! :wave: Welcome to my blog. This is a place for me to channel my learning into a creative and structured format. Some of the topics I write about that interest me include security architecture, vulnerability research, new developments in tech, and cyber warfare.
+Hey there! :wave: Welcome to my blog - a place for me to channel my learning into a creative and structured format. Some topics I write about that interest me include security architecture, vulnerability research, new developments in tech, and cyber warfare.
 
 Thanks for visiting! :space_invader:
