@@ -1,6 +1,6 @@
 ---
-title: "What is Traffic Signaling?"
-tags: "ATT&CK"
+title: "MITRE ATT&CK TTPs: Traffic Signaling"
+tags: "Learning"
 article_header:
   type: cover
   image:

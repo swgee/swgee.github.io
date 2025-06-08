@@ -1,6 +1,6 @@
 ---
-title: "What is SEO Poisoning?"
-tags: "ATT&CK"
+title: "MITRE ATT&CK TTPs: SEO Poisoning"
+tags: "Learning"
 article_header:
   type: cover
   image:
