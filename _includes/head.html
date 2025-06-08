@@ -23,6 +23,92 @@
 
 {%- include head/custom.html -%}
 
+<!-- Enhanced SEO Meta Tags -->
+{%- if page.excerpt -%}
+<meta property="og:description" content="{{ page.excerpt | strip_html | strip_newlines | strip | truncate: 160 }}">
+<meta name="twitter:description" content="{{ page.excerpt | strip_html | strip_newlines | strip | truncate: 160 }}">
+{%- else -%}
+<meta property="og:description" content="{{ site.description | truncate: 160 }}">
+<meta name="twitter:description" content="{{ site.description | truncate: 160 }}">
+{%- endif -%}
+
+{%- if page.cover or page.image -%}
+<meta property="og:image" content="{{ site.url }}{{ page.cover | default: page.image }}">
+<meta name="twitter:image" content="{{ site.url }}{{ page.cover | default: page.image }}">
+<meta name="twitter:card" content="summary_large_image">
+{%- else -%}
+<meta name="twitter:card" content="summary">
+{%- endif -%}
+
+<meta property="og:title" content="{%- if page.title -%}{{ page.title }} - {{ site.title }}{%- else -%}{{ site.title }}{%- endif -%}">
+<meta property="og:url" content="{{ site.url }}{{ page.url }}">
+<meta property="og:type" content="{%- if page.layout == 'article' or page.layout == 'post' -%}article{%- else -%}website{%- endif -%}">
+<meta property="og:site_name" content="{{ site.title }}">
+
+{%- if page.layout == 'article' or page.layout == 'post' -%}
+<meta property="article:author" content="{{ site.author.name }}">
+{%- if page.date -%}
+<meta property="article:published_time" content="{{ page.date | date_to_xmlschema }}">
+{%- endif -%}
+{%- if page.last_modified_at -%}
+<meta property="article:modified_time" content="{{ page.last_modified_at | date_to_xmlschema }}">
+{%- endif -%}
+{%- if page.tags -%}
+{%- for tag in page.tags -%}
+<meta property="article:tag" content="{{ tag }}">
+{%- endfor -%}
+{%- endif -%}
+{%- endif -%}
+
+{%- if page.keywords -%}
+<meta name="keywords" content="{{ page.keywords }}">
+{%- endif -%}
+
+<!-- Structured Data -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  {%- if page.layout == 'article' or page.layout == 'post' -%}
+  "@type": "BlogPosting",
+  "headline": "{{ page.title | escape }}",
+  "description": "{% if page.excerpt %}{{ page.excerpt | strip_html | strip_newlines | strip | truncate: 160 | escape }}{% else %}{{ site.description | escape }}{% endif %}",
+  "image": {
+    "@type": "ImageObject",
+    "url": "{% if page.cover %}{{ site.url }}{{ page.cover }}{% elsif page.image %}{{ site.url }}{{ page.image }}{% else %}{{ site.url }}/assets/thumbnail.png{% endif %}",
+    "width": 1200,
+    "height": 630
+  },
+  "datePublished": "{{ page.date | date_to_xmlschema }}",
+  "dateModified": "{% if page.last_modified_at %}{{ page.last_modified_at | date_to_xmlschema }}{% else %}{{ page.date | date_to_xmlschema }}{% endif %}",
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "{{ site.url }}{{ page.url }}"
+  },
+  {%- else -%}
+  "@type": "WebSite",
+  "name": "{{ site.title | escape }}",
+  "description": "{{ site.description | escape }}",
+  "url": "{{ site.url }}",
+  {%- endif -%}
+  "author": {
+    "@type": "Person",
+    "name": "{{ site.author.name | escape }}",
+    "url": "{{ site.author.url }}"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "{{ site.title | escape }}",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "{{ site.url }}{{ site.logo | default: '/assets/thumbnail.png' }}",
+      "width": 512,
+      "height": 512
+    }
+  },
+  "inLanguage": "{{ site.lang | default: 'en' }}"
+}
+</script>
+
 {% if page.opengraph %}
   {{ page.opengraph }}
 {% endif %}

@@ -1,0 +1,14 @@
+User-agent: *
+Allow: /
+Disallow: /assets/
+Disallow: /_site/
+Disallow: /test/
+Disallow: /docs/
+Disallow: /screenshots/
+Disallow: /docker/
+Disallow: /.git/
+Disallow: /.vscode/
+Disallow: /.jekyll-cache/
+
+# Sitemap location
+Sitemap: https://benkofman.com/sitemap.xml

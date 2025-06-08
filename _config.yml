@@ -31,12 +31,40 @@ lang: en # the language of your site, default as "en"
 timezone: US/Eastern # see https://en.wikipedia.org/wiki/List_of_tz_database_time_zones for the available values
 
 
+## => SEO Configuration
+##############################
+logo: /assets/thumbnail.png # path to your site logo for structured data
+social:
+  name: Ben Kofman
+  links:
+    - https://github.com/swgee
+    - https://benkofman.com
+
+# SEO tag plugin settings
+twitter:
+  username: # add your twitter username if you have one
+  card: summary_large_image
+
+# Schema.org structured data
+webmaster_verifications:
+  google: # Google Search Console verification code
+  bing: # Bing Webmaster Tools verification code
+
+# Default image for social sharing
+defaults:
+  - scope:
+      path: ""
+      type: "posts" 
+    values:
+      image: /assets/thumbnail.png # add a default image for posts
+
+
 ## => Author and Social
 ##############################
 author:
   type      : person # "person" (default), "organization"
   name      : Ben Kofman
-  url       :
+  url       : https://benkofman.com
   avatar    : # https://media.licdn.com/dms/image/v2/D4E03AQHQmGi4hEe9Fg/profile-displayphoto-shrink_800_800/profile-displayphoto-shrink_800_800/0/1721742232325?e=1737590400&v=beta&t=cAxa_joTJ0_uq7gUuz29X-NXeqshl5eaHA1maqtwc8I # path or url of avatar image (square)
   bio       : InfoSec Practitioner
   email     :
@@ -182,6 +210,13 @@ analytics:
 markdown    : kramdown
 highlighter : rouge
 permalink   : date
+
+plugins:
+  - jekyll-paginate
+  - jekyll-sitemap
+  - jekyll-feed
+  - jekyll-seo-tag
+  - jemoji
 
 exclude:
   - CHANGELOG.md
